@@ -63,15 +63,15 @@ import espressif.WifiConstants;
 import espressif.WifiScan;
 import uva.Endpoint;
 
-import static com.espressif.provisioning.UVAConstans.MAX_CHUNK_LENGTH;
-import static com.espressif.provisioning.UVAConstans.REQUEST_FIELD_CHUNK;
-import static com.espressif.provisioning.UVAConstans.REQUEST_FIELD_LAST_FLAG;
-import static com.espressif.provisioning.UVAConstans.REQUEST_FIELD_SEQUENCE;
-import static com.espressif.provisioning.UVAConstans.UVA_ENDPOINT_SET_ENTERPRISE_CERTIFICATE;
-import static com.espressif.provisioning.UVAConstans.UVA_ENDPOINT_SET_ENTERPRISE_CREDENTIALS;
-import static com.espressif.provisioning.UVAConstans.REQUEST_FIELD_DEVICE_TOKEN;
-import static com.espressif.provisioning.UVAConstans.REQUEST_FIELD_PASSWORD;
-import static com.espressif.provisioning.UVAConstans.REQUEST_FIELD_USERNAME;
+import static com.espressif.provisioning.UVAConstants.MAX_CHUNK_LENGTH;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_CHUNK;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_LAST_FLAG;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_SEQUENCE;
+import static com.espressif.provisioning.UVAConstants.UVA_ENDPOINT_SET_ENTERPRISE_CERTIFICATE;
+import static com.espressif.provisioning.UVAConstants.UVA_ENDPOINT_SET_ENTERPRISE_CREDENTIALS;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_DEVICE_TOKEN;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_PASSWORD;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_USERNAME;
 import static java.lang.Thread.sleep;
 
 /**
