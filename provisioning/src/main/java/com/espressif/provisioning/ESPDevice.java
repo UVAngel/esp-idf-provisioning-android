@@ -63,6 +63,15 @@ import espressif.WifiConstants;
 import espressif.WifiScan;
 import uva.Endpoint;
 
+import static com.espressif.provisioning.UVAConstants.MAX_CHUNK_LENGTH;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_CHUNK;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_LAST_FLAG;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_SEQUENCE;
+import static com.espressif.provisioning.UVAConstants.UVA_ENDPOINT_SET_ENTERPRISE_CERTIFICATE;
+import static com.espressif.provisioning.UVAConstants.UVA_ENDPOINT_SET_ENTERPRISE_CREDENTIALS;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_DEVICE_TOKEN;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_PASSWORD;
+import static com.espressif.provisioning.UVAConstants.REQUEST_FIELD_USERNAME;
 import static java.lang.Thread.sleep;
 
 /**
@@ -486,21 +495,21 @@ public class ESPDevice {
     /**
      * Send Enterprise Wi-Fi credentials to device for provisioning.
      *
-     * @param username Username of the Wi-Fi which is to be configure in device.
-     * @param password Password of the Wi-Fi which is to be configure in device.
+     * @param username Username of the Wi-Fi which is to be configured in device.
+     * @param password Password of the Wi-Fi which is to be configured in device.
      * @param listener Listener to get success and failure.
      */
     public void setEnterpriseCredentials(final String username, final String password, final ResponseListener listener) {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject
-                    .put("device_token", deviceAccessToken)
-                    .put("username", username)
-                    .put("password", password);
+                    .put(REQUEST_FIELD_DEVICE_TOKEN, deviceAccessToken)
+                    .put(REQUEST_FIELD_USERNAME, username)
+                    .put(REQUEST_FIELD_PASSWORD, password);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        sendJSONObjectToCustomEndPoint("set-wpa2-ent-creds", jsonObject, listener);
+        sendJSONObjectToCustomEndPoint(UVA_ENDPOINT_SET_ENTERPRISE_CREDENTIALS, jsonObject, listener);
     }
 
     /**
@@ -516,13 +525,13 @@ public class ESPDevice {
     /**
      * Send Enterprise Wi-Fi certificate to device for provisioning.
      *
-     * @param certificate Certificate of the Wi-Fi which is to be configure in device.
+     * @param certificate Certificate of the Wi-Fi which is to be configured in device.
      * @param sequence    sequence of the certificate.
      * @param listener    Listener to get success and failure.
      */
     private void setEnterpriseCertificate(final String certificate, final int sequence, final ResponseListener listener) {
-        int beginIndex = sequence * 256;
-        int endIndex = (sequence + 1) * 256;
+        int beginIndex = sequence * MAX_CHUNK_LENGTH;
+        int endIndex = (sequence + 1) * MAX_CHUNK_LENGTH;
         final boolean isLast;
         if (endIndex >= certificate.length()) {
             endIndex = certificate.length();
@@ -534,14 +543,14 @@ public class ESPDevice {
         JSONObject jsonObject = new JSONObject();
         try {
             jsonObject
-                    .put("device_token", deviceAccessToken)
-                    .put("seq", sequence)
-                    .put("last", isLast)
-                    .put("chunk", certificatePart);
+                    .put(REQUEST_FIELD_DEVICE_TOKEN, deviceAccessToken)
+                    .put(REQUEST_FIELD_SEQUENCE, sequence)
+                    .put(REQUEST_FIELD_LAST_FLAG, isLast)
+                    .put(REQUEST_FIELD_CHUNK, certificatePart);
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        sendJSONObjectToCustomEndPoint("set-wpa2-ent-ca", jsonObject, new ResponseListener() {
+        sendJSONObjectToCustomEndPoint(UVA_ENDPOINT_SET_ENTERPRISE_CERTIFICATE, jsonObject, new ResponseListener() {
             @Override
             public void onSuccess(byte[] returnData) {
                 if (isLast) {
@@ -606,8 +615,8 @@ public class ESPDevice {
     /**
      * Send Wi-Fi credentials to device for provisioning.
      *
-     * @param ssid              SSID of the Wi-Fi which is to be configure in device.
-     * @param passphrase        Password of the Wi-Fi which is to be configure in device.
+     * @param ssid              SSID of the Wi-Fi which is to be configured in device.
+     * @param passphrase        Password of the Wi-Fi which is to be configured in device.
      * @param provisionListener Listener for provisioning callbacks.
      */
     public void provision(final String ssid, final String passphrase, final ProvisionListener provisionListener) {
