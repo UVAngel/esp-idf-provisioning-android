@@ -193,6 +193,8 @@ public class BLETransport implements Transport {
                 return;
             }
 
+            gatt.requestMtu(512);
+
             service = gatt.getService(UUID.fromString(serviceUuid));
 
             if (service == null) {
