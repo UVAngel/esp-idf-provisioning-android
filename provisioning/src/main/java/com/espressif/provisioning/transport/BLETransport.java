@@ -175,7 +175,7 @@ public class BLETransport implements Transport {
 
             if (newState == BluetoothProfile.STATE_CONNECTED) {
                 Log.e(TAG, "Connected to GATT server.");
-                gatt.discoverServices();
+                gatt.requestMtu(500);
             } else if (newState == BluetoothProfile.STATE_DISCONNECTED) {
                 Log.e(TAG, "Disconnected from GATT server.");
                 EventBus.getDefault().post(new DeviceConnectionEvent(ESPConstants.EVENT_DEVICE_DISCONNECTED));
@@ -192,8 +192,6 @@ public class BLETransport implements Transport {
                 EventBus.getDefault().post(new DeviceConnectionEvent(ESPConstants.EVENT_DEVICE_CONNECTION_FAILED));
                 return;
             }
-
-            gatt.requestMtu(512);
 
             service = gatt.getService(UUID.fromString(serviceUuid));
 
@@ -277,6 +275,7 @@ public class BLETransport implements Transport {
             super.onMtuChanged(gatt, mtu, status);
             if (status == BluetoothGatt.GATT_SUCCESS) {
                 Log.d(TAG, "Supported MTU = " + mtu);
+                gatt.discoverServices();
             }
         }
 
