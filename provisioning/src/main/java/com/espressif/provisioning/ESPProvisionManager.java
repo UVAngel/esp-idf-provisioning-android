@@ -366,6 +366,21 @@ public class ESPProvisionManager {
     }
 
     /**
+     * This method is used to scan BLE devices with having given prefix in device name.
+     *
+     * @param prefix             Prefix to filter devices from device name.
+     * @param bleScannerListener BleScanListener for scanning callbacks.
+     * @param scanTimeout timeout to cancel scan, if scanTimeout =-1 - scanning until call stopBleScan().
+     */
+    @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.BLUETOOTH, Manifest.permission.ACCESS_FINE_LOCATION})
+    public void searchBleEspDevices(String prefix, BleScanListener bleScannerListener, long scanTimeout) {
+
+        Log.e(TAG, "Search for BLE devices");
+        bleScanner = new BleScanner(context, prefix, bleScannerListener, scanTimeout);
+        bleScanner.startScan();
+    }
+
+    /**
      * This method is used to stop BLE scanning.
      */
     @RequiresPermission(allOf = {Manifest.permission.BLUETOOTH_ADMIN, Manifest.permission.BLUETOOTH, Manifest.permission.ACCESS_FINE_LOCATION})
