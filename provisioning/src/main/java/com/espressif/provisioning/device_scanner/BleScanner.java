@@ -50,6 +50,7 @@ public class BleScanner {
 
     private boolean isScanning = false;
     private String prefix = "";
+    private long scanTimeout = SCAN_TIME_OUT;
 
     public BleScanner(Context context, BleScanListener bleScannerListener) {
 
@@ -64,6 +65,12 @@ public class BleScanner {
 
         this(context, bleScannerListener);
         this.prefix = prefix;
+    }
+
+    public BleScanner(Context context, String prefix, BleScanListener bleScannerListener, long scanTimeout) {
+
+        this(context, prefix, bleScannerListener);
+        this.scanTimeout = scanTimeout;
     }
 
     /**
@@ -86,7 +93,9 @@ public class BleScanner {
 
         isScanning = true;
         bluetoothLeScanner.startScan(filters, settings, scanCallback);
-        handler.postDelayed(stopScanTask, SCAN_TIME_OUT);
+        if (scanTimeout != -1) {
+            handler.postDelayed(stopScanTask, scanTimeout);
+        }
     }
 
     /**
